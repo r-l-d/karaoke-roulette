@@ -1,40 +1,18 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import axios from "./axios";
-import { Link } from "react-router-dom";
 import Typography from "@material-ui/core/Typography";
-import Input from "@material-ui/core/Input";
 import TextField from "@material-ui/core/TextField";
-import Card from "@material-ui/core/Card";
-import CardActionArea from "@material-ui/core/CardActionArea";
-import CardActions from "@material-ui/core/CardActions";
-import CardContent from "@material-ui/core/CardContent";
-import CardMedia from "@material-ui/core/CardMedia";
 import Button from "@material-ui/core/Button";
 import { makeStyles } from "@material-ui/core/styles";
-import Friendshipbutton from "./friendshipbutton";
 import Container from "@material-ui/core/Container";
-import Box from "@material-ui/core/Box";
 import Grid from "@material-ui/core/Grid";
-import Video from "./video";
-import { MoreResults } from "./more-results";
 import Favorites from "./favorites";
 import IframePlayer from "./iframePlayer";
-import { useDispatch, useSelector } from "react-redux";
-import Queue from "./queue";
-import Fab from "@material-ui/core/Fab";
-import MicIcon from "@material-ui/icons/Mic";
+import { useDispatch } from "react-redux";
 import Chips from "./chips";
 import CasinoIcon from "@material-ui/icons/Casino";
 
-import {
-    receiveFriendsWannabes,
-    acceptFriendRequest,
-    unfriend,
-    getFavorites,
-    removeFavorite,
-    setPlaylist,
-    playNow
-} from "./actions";
+import { setPlaylist, playNow } from "./actions";
 
 const useStyles = makeStyles({
     card: {
@@ -74,29 +52,9 @@ const useStyles = makeStyles({
 
 export default function Home() {
     const classes = useStyles();
-    const [users, setUsers] = useState([]);
     const [query, setQuery] = useState("");
-    const [songs, setSongs] = useState([]);
-    const [videoId, setVideoId] = useState("");
     const dispatch = useDispatch();
     const [error, setError] = useState(false);
-
-    // const songs = useSelector(state => state && state.songs);
-
-    // useEffect(() => {
-    //     let ignore = false;
-    //     (async () => {
-    //         console.log("query: ", query);
-    //         const { data } = await axios.get(`/api/users/${query}`);
-    //         if (!ignore) {
-    //             console.log("users data: ", data);
-    //             setUsers(data);
-    //         } else {
-    //             alert("Ignored!");
-    //         }
-    //     })();
-    //     return () => (ignore = true);
-    // }, [query]);
 
     const keyCheck = e => {
         if (e.key == "Enter") {
@@ -118,27 +76,11 @@ export default function Home() {
                 return;
             }
             dispatch(setPlaylist(data));
-            // console.log("data.items: ", data);
             dispatch(playNow(data[0].id.videoId));
             setQuery("");
-            // setSongs(data.items);
-            // setVideoId(data.items[0].id.videoId);
         } catch (err) {
             console.log(err);
         }
-        // .then(resp => {
-        //     setButtonText(resp.data.buttonText);
-        //     if (resp.data.buttonText == "Cancel Friend Request") {
-        //         console.log(
-        //             "new friend request received for: ",
-        //             props.otherId
-        //         );
-        //     }
-        // });
-    }
-
-    if (!songs) {
-        return null;
     }
 
     return (
@@ -213,15 +155,3 @@ export default function Home() {
         </div>
     );
 }
-
-/* {videoId && <Video videoId={videoId} songs={songs} />} */
-
-// <MoreResults />
-
-// <Typography className={classes.typography} variant="h4">
-//     Welcome page
-// </Typography>
-
-// <Grid item xs>
-//     <Queue />
-// </Grid>

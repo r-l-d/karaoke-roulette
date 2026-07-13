@@ -4,10 +4,7 @@ import AppBar from "@material-ui/core/AppBar";
 import Toolbar from "@material-ui/core/Toolbar";
 import Typography from "@material-ui/core/Typography";
 import IconButton from "@material-ui/core/IconButton";
-import MenuIcon from "@material-ui/icons/Menu";
-import MenuItem from "@material-ui/core/MenuItem";
 import Menu from "@material-ui/core/Menu";
-import Avatar from "@material-ui/core/Avatar";
 import Link from "@material-ui/core/Link";
 
 const useStyles = makeStyles(theme => ({
@@ -19,11 +16,6 @@ const useStyles = makeStyles(theme => ({
     },
     title: {
         flexGrow: 1
-    },
-    avatar: {
-        width: 60,
-        height: 60,
-        marginLeft: 30
     },
     link: {
         underline: "none",
@@ -39,13 +31,8 @@ const useStyles = makeStyles(theme => ({
 
 export default function MenuAppBar(props) {
     const classes = useStyles();
-    const [auth, setAuth] = React.useState(false);
     const [anchorEl, setAnchorEl] = React.useState(null);
     const open = Boolean(anchorEl);
-
-    const handleChange = event => {
-        setAuth(event.target.checked);
-    };
 
     const handleMenu = event => {
         setAnchorEl(event.currentTarget);
@@ -77,7 +64,7 @@ export default function MenuAppBar(props) {
                                     <Link
                                         color="inherit"
                                         underline="none"
-                                        href="/Logout"
+                                        href="/logout"
                                     >
                                         Logout
                                     </Link>
@@ -105,18 +92,7 @@ export default function MenuAppBar(props) {
                                     open={open}
                                     onClose={handleClose}
                                 >
-                                    <MenuItem>
-                                        <Link
-                                            color="inherit"
-                                            underline="none"
-                                            href="/"
-                                        >
-                                            Profile
-                                        </Link>
-                                    </MenuItem>
-                                    <MenuItem onClick={handleClose}>
-                                        <a href="/logout">Log Out</a>
-                                    </MenuItem>
+                                    <a href="/logout">Log Out</a>
                                 </Menu>
                             </div>
                         </div>

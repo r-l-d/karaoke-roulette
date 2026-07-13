@@ -1,11 +1,7 @@
 import React from "react";
 import { makeStyles } from "@material-ui/core/styles";
-import Avatar from "@material-ui/core/Avatar";
 import Chip from "@material-ui/core/Chip";
-import FaceIcon from "@material-ui/icons/Face";
-import DoneIcon from "@material-ui/icons/Done";
 import Paper from "@material-ui/core/Paper";
-import TagFacesIcon from "@material-ui/icons/TagFaces";
 import { useSelector } from "react-redux";
 
 const useStyles = makeStyles(theme => ({
@@ -87,102 +83,3 @@ export default function Chips(props) {
         </Paper>
     );
 }
-//
-//
-// const useStyles = makeStyles(theme => ({
-//     root: {
-//         display: "flex",
-//         justifyContent: "center",
-//         flexWrap: "wrap",
-//         "& > *": {
-//             margin: theme.spacing(0.5)
-//         }
-//     }
-// }));
-//
-// export default function Chips(props) {
-//     const classes = useStyles();
-//     let setQuery = props.setQuery;
-//
-//     const handleDelete = () => {
-//         console.info("You clicked the delete icon.");
-//     };
-//
-//     const handleClick = query => {
-//         console.log("query", query);
-//         setQuery(query + "karaoke");
-//     };
-//
-//     return (
-//         <div className={classes.root}>
-//             <Chip label="Basic" variant="outlined" />
-//             <Chip label="Disabled" disabled variant="outlined" />
-//             <Chip
-//                 avatar={<Avatar>M</Avatar>}
-//                 label="1970s"
-//                 onClick={() => handleClick("1970s")}
-//                 variant="outlined"
-//             />
-//             <Chip
-//                 avatar={
-//                     <Avatar alt="Natacha" src="/static/images/avatar/1.jpg" />
-//                 }
-//                 label="Deletable"
-//                 onDelete={handleDelete}
-//                 variant="outlined"
-//             />
-//             <Chip
-//                 icon={<FaceIcon />}
-//                 label="Clickable deletable"
-//                 onClick={handleClick}
-//                 onDelete={handleDelete}
-//                 variant="outlined"
-//             />
-//             <Chip
-//                 label="Custom delete icon"
-//                 onClick={handleClick}
-//                 onDelete={handleDelete}
-//                 deleteIcon={<DoneIcon />}
-//                 variant="outlined"
-//             />
-//             <Chip
-//                 label="Clickable link"
-//                 component="a"
-//                 href="#chip"
-//                 clickable
-//                 variant="outlined"
-//             />
-//             <Chip
-//                 avatar={<Avatar>M</Avatar>}
-//                 label="Primary clickable"
-//                 clickable
-//                 color="primary"
-//                 onDelete={handleDelete}
-//                 deleteIcon={<DoneIcon />}
-//                 variant="outlined"
-//             />
-//             <Chip
-//                 icon={<FaceIcon />}
-//                 label="Primary clickable"
-//                 clickable
-//                 color="primary"
-//                 onDelete={handleDelete}
-//                 deleteIcon={<DoneIcon />}
-//                 variant="outlined"
-//             />
-//             <Chip
-//                 label="Deletable primary"
-//                 onDelete={handleDelete}
-//                 color="primary"
-//                 variant="outlined"
-//             />
-//             <Chip
-//                 icon={<FaceIcon />}
-//                 label="Deletable secondary"
-//                 onDelete={handleDelete}
-//                 color="secondary"
-//                 variant="outlined"
-//             />
-//         </div>
-//     );
-// }

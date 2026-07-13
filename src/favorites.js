@@ -1,29 +1,12 @@
-import React, { useState, useEffect } from "react";
+import React, { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import {
-    receiveFriendsWannabes,
-    acceptFriendRequest,
-    unfriend,
-    getFavorites,
-    removeFavorite,
-    playNow,
-    addToQueue
-} from "./actions";
-import { Link } from "react-router-dom";
-import Container from "@material-ui/core/Container";
+import { getFavorites, removeFavorite, playNow } from "./actions";
 import Box from "@material-ui/core/Box";
 import Card from "@material-ui/core/Card";
-import CardActionArea from "@material-ui/core/CardActionArea";
-import CardActions from "@material-ui/core/CardActions";
 import CardContent from "@material-ui/core/CardContent";
 import CardMedia from "@material-ui/core/CardMedia";
 import Typography from "@material-ui/core/Typography";
 import { makeStyles, useTheme } from "@material-ui/core/styles";
-import Button from "@material-ui/core/Button";
-import Paper from "@material-ui/core/Paper";
-import { borders } from "@material-ui/system";
-import TextField from "@material-ui/core/TextField";
-import { display } from "@material-ui/system";
 import PlayArrowIcon from "@material-ui/icons/PlayArrow";
 import IconButton from "@material-ui/core/IconButton";
 import HighlightOffIcon from "@material-ui/icons/HighlightOff";

@@ -5,7 +5,7 @@ import { render, waitForElement } from "@testing-library/react";
 
 jest.mock("./axios");
 
-test("App renders correctly", async () => {
+test("App renders karaoke shell after loading user", async () => {
     axios.get.mockResolvedValue({
         data: {
             id: 10,
@@ -14,13 +14,11 @@ test("App renders correctly", async () => {
             image_url: "/funkychicken.png"
         }
     });
-    const { container } = render(<App />);
+    const { container, getByText } = render(<App />);
 
     expect(container.innerHTML).toBe("");
 
-    const elem = await waitForElement(() => container.querySelector("div"));
+    await waitForElement(() => getByText("Karaoke Roulette"));
 
-    expect(container.querySelectorAll("div").length).toBe(1);
-
-    console.log("Container innerHTML is " + container.innerHTML);
+    expect(getByText("Karaoke Roulette")).toBeTruthy();
 });

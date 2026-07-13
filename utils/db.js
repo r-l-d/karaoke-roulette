@@ -1,10 +1,39 @@
 var spicedPg = require("spiced-pg");
-var db = spicedPg(
-    process.env.DATABASE_URL ||
-        "postgres:postgres:postgres@localhost:5432/finalproject"
-);
+const MOCK_MODE = process.env.MOCK_MODE === "true";
+
+let mockUsers = [
+    {
+        id: 1,
+        first: "Mock",
+        last: "Singer",
+        email: "mock@karaoke.local",
+        password: "mock-password"
+    }
+];
+
+let mockFavorites = [
+    {
+        id: 1,
+        video_id: "uXza21eCeOM",
+        title: "Take On Me - Karaoke Version",
+        image_url: "https://i.ytimg.com/vi/uXza21eCeOM/default.jpg",
+        user_id: 1
+    }
+];
+
+var db = MOCK_MODE
+    ? null
+    : spicedPg(
+          process.env.DATABASE_URL ||
+              "postgres:postgres:postgres@localhost:5432/finalproject"
+      );
 
 exports.addUser = function addUser(first, last, email, password) {
+    if (MOCK_MODE) {
+        const id = mockUsers.length + 1;
+        mockUsers.push({ id, first, last, email, password });
+        return Promise.resolve({ rows: [{ id }] });
+    }
     return db.query(
         "INSERT INTO users(first, last, email, password) VALUES ($1, $2, $3, $4) RETURNING id",
         [first, last, email, password]
@@ -12,18 +41,35 @@ exports.addUser = function addUser(first, last, email, password) {
 };
 
 exports.getPassword = function getPassword(email) {
+    if (MOCK_MODE) {
+        const user = mockUsers.find(mockUser => mockUser.email === email);
+        return Promise.resolve({ rows: user ? [user] : [] });
+    }
     return db.query("SELECT password, id FROM users WHERE email=$1", [email]);
 };
 
 exports.getUser = function getUser(id) {
+    if (MOCK_MODE) {
+        const user = mockUsers.find(mockUser => mockUser.id == id);
+        return Promise.resolve({ rows: user ? [user] : [] });
+    }
     return db.query("SELECT first, last FROM users WHERE id=$1", [id]);
 };
 
 exports.getFavorites = function getFavorites(id) {
+    if (MOCK_MODE) {
+        return Promise.resolve({
+            rows: mockFavorites.filter(favorite => favorite.user_id == id)
+        });
+    }
     return db.query("SELECT * FROM favorites WHERE user_id=$1", [id]);
 };
 
 exports.removeFavorite = function removeFavorite(id) {
+    if (MOCK_MODE) {
+        mockFavorites = mockFavorites.filter(favorite => favorite.id != id);
+        return Promise.resolve({ rows: [] });
+    }
     return db.query("DELETE FROM favorites WHERE id=$1", [id]);
 };
 
@@ -33,76 +79,31 @@ exports.addFavorite = function addFavorite(
     image_url,
     user_id
 ) {
+    if (MOCK_MODE) {
+        const id = mockFavorites.length
+            ? Math.max(...mockFavorites.map(favorite => favorite.id)) + 1
+            : 1;
+        const favorite = {
+            id,
+            video_id,
+            title,
+            image_url,
+            user_id
+        };
+        mockFavorites.push(favorite);
+        return Promise.resolve({
+            rows: [
+                {
+                    id,
+                    video_id,
+                    title,
+                    image_url
+                }
+            ]
+        });
+    }
     return db.query(
         "INSERT INTO favorites(video_id, title, image_url, user_id) VALUES ($1, $2, $3, $4) RETURNING id, video_id, title, image_url",
         [video_id, title, image_url, user_id]
     );
 };
-// exports.addImage = function addImage(url, id) {
-//     return db.query("UPDATE users SET image_url=$1  WHERE id=$2", [url, id]);
-// };
-
-// exports.updateBio = function updateBio(bio, id) {
-//     return db.query("UPDATE users SET bio=$1 WHERE id=$2", [bio, id]);
-// };
-
-// exports.getUsers = function getUsers(val) {
-//     return db.query(
-//         "SELECT first, last, id, bio, image_url FROM users WHERE first ILIKE $1 OR last ILIKE $1",
-//         [val + "%"]
-//     );
-// };
-
-// exports.newUsers = function newUsers() {
-//     return db.query(
-//         "SELECT first, last, id, bio, image_url FROM users ORDER BY id DESC LIMIT 6"
-//     );
-// };
-
-// exports.getFriendship = function getFriendship(receiver_id, sender_id) {
-//     return db.query(
-//         "SELECT * FROM friendships WHERE (receiver_id = $1 AND sender_id = $2) OR (receiver_id = $2 AND sender_id = $1)",
-//         [receiver_id, sender_id]
-//     );
-// };
-
-// exports.insertFriendship = function insertFriendship(receiver_id, sender_id) {
-//     return db.query(
-//         "INSERT INTO friendships(receiver_id, sender_id) VALUES($1, $2)",
-//         [receiver_id, sender_id]
-//     );
-// };
-//
-// exports.acceptFriendship = function acceptFriendship(receiver_id, sender_id) {
-//     return db.query(
-//         "UPDATE friendships SET accepted='true' WHERE receiver_id=$1 AND sender_id=$2",
-//         [receiver_id, sender_id]
-//     );
-// };
-//
-// exports.endFriendship = function endFriendship(receiver_id, sender_id) {
-//     return db.query(
-//         "DELETE FROM friendships WHERE (receiver_id = $1 AND sender_id = $2) OR (receiver_id = $2 AND sender_id = $1)",
-//         [receiver_id, sender_id]
-//     );
-// };
-//
-// exports.getFriendsAndWannabes = function getFriendsAndWannabes(id) {
-//     return db.query(
-//         "SELECT users.id, first, last, image_url, accepted FROM friendships JOIN users ON (accepted = false AND receiver_id = $1 AND sender_id = users.id) OR (accepted = true AND receiver_id = $1 AND sender_id = users.id) OR (accepted = true AND sender_id = $1 AND receiver_id = users.id)",
-//         [id]
-//     );
-// };
-//
-// exports.getLastTenChatMessages = function getLastTenChatMessages() {
-//     return db.query(
-//         "SELECT chatroom.id AS msg_id, chatroom.message, chatroom.created_at, users.id, users.image_url, users.first, users.last FROM chatroom JOIN users ON (chatroom.user_id = users.id) ORDER BY chatroom.id DESC LIMIT 10  "
-//     );
-// };
-//
-// exports.addMessage = function addMessage(message, user_id) {
-//     return db.query(
-//         "INSERT INTO chatroom(message, user_id) VALUES($1, $2) RETURNING id, created_at",
-//         [message, user_id]
-//     );
-// };
